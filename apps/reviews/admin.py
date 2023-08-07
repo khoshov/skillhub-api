@@ -3,7 +3,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from django.contrib import admin
 
-from apps.reviews.models import Review
+from reviews.models import Review
 
 
 class ReviewResource(resources.ModelResource):

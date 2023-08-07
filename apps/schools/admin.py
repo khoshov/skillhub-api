@@ -2,8 +2,8 @@ from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
-from apps.core.admin import activate, deactivate
-from apps.schools.models import School, SchoolAlias
+from core.admin import activate, deactivate
+from schools.models import School, SchoolAlias
 
 
 class CategoryResource(resources.ModelResource):

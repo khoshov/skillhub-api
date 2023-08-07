@@ -6,9 +6,9 @@ from mptt.admin import DraggableMPTTAdmin
 
 from django.contrib import admin
 
-from apps.core.admin import activate, deactivate, make_draft, make_public
-from apps.courses.models import Category, Course, CourseCategory
-from apps.schools.models import School
+from core.admin import activate, deactivate, make_draft, make_public
+from courses.models import Category, Course, CourseCategory
+from schools.models import School
 
 
 class CategoryResource(resources.ModelResource):

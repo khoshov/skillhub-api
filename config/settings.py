@@ -15,6 +15,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
 
 # Allows to keep applications in apps directory
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
