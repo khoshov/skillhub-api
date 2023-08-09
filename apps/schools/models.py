@@ -17,10 +17,11 @@ class School(models.Model):
         _('Аккредитованное учебное заведение'),
         default=False,
     )
-    rating = models.FloatField(
-        _('Рейтинг'),
-        default=0,
-    )
+    # TODO: Переделать на cached property
+    # rating = models.FloatField(
+    #     _('Рейтинг'),
+    #     default=0,
+    # )
     epc = models.FloatField(
         _('Средний заработок с перехода'),
         default=0
@@ -28,6 +29,16 @@ class School(models.Model):
     is_active = models.BooleanField(
         _('Активный'),
         default=False,
+    )
+
+    meta_title = models.CharField(
+        _('Meta title'),
+        max_length=255,
+        blank=True, null=True,
+    )
+    meta_description = models.TextField(
+        _('Meta description'),
+        blank=True, null=True,
     )
 
     class Meta:
@@ -58,3 +69,60 @@ class SchoolAlias(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SchoolTag(models.Model):
+    name = models.CharField(
+        _('Имя'),
+        max_length=255,
+    )
+
+    class Meta:
+        verbose_name = _('Метка')
+        verbose_name_plural = _('Метки')
+
+    def __str__(self):
+        return self.name
+
+
+class SchoolTagOption(models.Model):
+    text = models.TextField(
+        _('Текст'),
+    )
+    tag = models.ForeignKey(
+        'schools.SchoolTag',
+        models.CASCADE,
+        related_name='options',
+        verbose_name=_('Метка'),
+    )
+
+    class Meta:
+        verbose_name = _('Вариант метки')
+        verbose_name_plural = _('Варианты меток')
+
+    def __str__(self):
+        return self.text
+
+
+class SchoolTagMatch(models.Model):
+    review = models.ForeignKey(
+        'reviews.Review',
+        models.CASCADE,
+        related_name='matches',
+        verbose_name=_('Отзыв'),
+    )
+    tag_option = models.ForeignKey(
+        'schools.SchoolTagOption',
+        models.CASCADE,
+        verbose_name=_('Вариант метки'),
+    )
+    text = models.TextField(
+        _('Текст'),
+    )
+
+    class Meta:
+        verbose_name = _('Совпадение метки')
+        verbose_name_plural = _('Совпадения меток')
+
+    def __str__(self):
+        return self.text

@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -37,9 +38,10 @@ class Review(models.Model):
         related_name='reviews',
         verbose_name=_('Школа'),
     )
-    source = models.CharField(
-        _('Источник отзыва'),
-        max_length=255,
+    source = models.ForeignKey(
+        'reviews.ReviewSource',
+        models.CASCADE,
+        verbose_name=_('Источник отзыва'),
     )
     url = models.URLField(
         _('Ссылка на отзыв'),
@@ -76,3 +78,21 @@ class Review(models.Model):
 
     def __str__(self):
         return self.url
+
+
+class ReviewSource(models.Model):
+    name = models.CharField(
+        _('Источник отзыва'),
+        max_length=255,
+    )
+    description = RichTextField(
+        _('Дополнительный текст'),
+        blank=True, null=True,
+    )
+
+    class Meta:
+        verbose_name = _('Источник отзывов')
+        verbose_name_plural = _('Источники отзывов')
+
+    def __str__(self):
+        return self.name
