@@ -1,9 +1,9 @@
 from ninja import ModelSchema
 
-from .models import Course
+from .models import School
 
 
-class CourseSchema(ModelSchema):
+class SchoolSchema(ModelSchema):
     class Config:
-        model = Course
+        model = School
         model_fields = '__all__'

@@ -1,6 +1,6 @@
 from typing import List
 
-from django.shortcuts import get_object_or_404
+from django.http import Http404
 from ninja import Router
 
 from .models import Course
@@ -10,12 +10,15 @@ router = Router()
 
 
 @router.get('/', response=List[CourseSchema])
-def list_courses(request):
-    qs = Course.objects.all()
-    return qs
+async def list_courses(request):
+    return [blog async for blog in Course.objects.all()]
 
 
 @router.get("/{course_id}", response=CourseSchema)
-def get_course(request, course_id: int):
-    courses = get_object_or_404(Course, id=course_id)
-    return courses
+async def get_course(request, course_id: int):
+    try:
+        return await Course.objects.aget(id=course_id)
+    except Course.DoesNotExist:
+        raise Http404(
+            "No %s matches the given query." % Course._meta.object_name
+        )
