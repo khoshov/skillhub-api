@@ -166,3 +166,7 @@ ELASTICSEARCH_DSL = {
         "hosts": env("ELASTICSEARCH_DSL_URL")
     },
 }
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
