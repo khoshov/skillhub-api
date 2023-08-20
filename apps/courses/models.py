@@ -57,6 +57,10 @@ class Course(models.Model):
     name = RichTextField(
         _('Название'),
     )
+    description = RichTextField(
+        _('Описание'),
+        blank=True, null=True,
+    )
     url = models.URLField(
         _('Ссылка на страницу курса'),
     )

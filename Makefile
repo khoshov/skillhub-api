@@ -32,3 +32,6 @@ shell:
 
 reset_db:
 	$(PYTHON) manage.py reset_db
+
+poetry_export:
+	poetry export --output requirements.txt

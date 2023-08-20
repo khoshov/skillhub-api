@@ -18,6 +18,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./pgdata/:/var/lib/postgresql/data/
   nginx-proxy:
     container_name: nginx-proxy
     image: nginxproxy/nginx-proxy

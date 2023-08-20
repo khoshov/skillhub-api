@@ -16,6 +16,7 @@ psycopg2-binary = "^2.9.7"
 pytils = "0.4.1"
 uvicorn = "^0.23.2"
 whitenoise = {extras = ["brotli"], version = "^6.5.0"}
+django-elasticsearch-dsl = "^7.3"
 
 [build-system]
 requires = ["poetry-core"]
