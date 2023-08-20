@@ -11,7 +11,7 @@ router = Router()
 
 @router.get('/', response=List[CourseSchema])
 async def list_courses(request):
-    return [blog async for blog in Course.objects.all()]
+    return [course async for course in Course.objects.all()]
 
 
 @router.get("/{course_id}", response=CourseSchema)
