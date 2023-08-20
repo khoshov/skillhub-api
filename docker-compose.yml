@@ -30,7 +30,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./esdata:/usr/share/elasticsearch/data
+      - ./esdata:/var/lib/elasticsearch/data
     ports:
       - "9200:9200"
   kibana:
