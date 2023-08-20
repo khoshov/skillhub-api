@@ -24,6 +24,9 @@ makemigrations:
 migrate:
 	$(PYTHON) manage.py migrate ${app}
 
+rebuild_index:
+	$(PYTHON) manage.py search_index --rebuild
+
 createsuperuser:
 	$(PYTHON) manage.py createsuperuser
 

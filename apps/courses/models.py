@@ -1,4 +1,5 @@
 from ckeditor.fields import RichTextField
+from django.urls import reverse
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
@@ -173,6 +174,9 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('api-1:get_course', kwargs={'course_id': self.pk})
 
 
 class Category(MPTTModel):

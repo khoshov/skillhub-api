@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     # Third party apps
     'ckeditor',
+    'django_elasticsearch_dsl',
     'import_export',
     'mptt',
 
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     'courses',
     'reviews',
     'schools',
+    'search',
 ]
 
 MIDDLEWARE = [
@@ -156,5 +158,11 @@ DEFAULT_FROM_EMAIL = 'supprot@skillhub.ru'
 STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": env("ELASTICSEARCH_DSL_URL")
     },
 }

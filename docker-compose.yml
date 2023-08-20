@@ -2,6 +2,7 @@ version: '3'
 
 services:
   django:
+    container_name: django
     build: .
     env_file:
       - .env
@@ -12,7 +13,9 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+      - elasticsearch
   postgres:
+    container_name: postgres
     image: postgres
     environment:
       - POSTGRES_DB=postgres
@@ -20,6 +23,26 @@ services:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - ./pgdata/:/var/lib/postgresql/data/
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.17.10
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+  kibana:
+    container_name: kibana
+    image: kibana:7.17.10
+    restart: unless-stopped
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    env_file:
+      - .env
   nginx-proxy:
     container_name: nginx-proxy
     image: nginxproxy/nginx-proxy

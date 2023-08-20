@@ -15,9 +15,9 @@ async def list_schools(request):
 
 
 @router.get("/{school_id}", response=SchoolSchema)
-async def get_school(request, course_id: int):
+async def get_school(request, school_id: int):
     try:
-        return await School.objects.aget(id=course_id)
+        return await School.objects.aget(id=school_id)
     except School.DoesNotExist:
         raise Http404(
             "No %s matches the given query." % School._meta.object_name
