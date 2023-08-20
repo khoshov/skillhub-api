@@ -3,8 +3,8 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
 from core.admin import activate, deactivate
-from reviews.models import Review
-from schools.models import School, SchoolAlias, SchoolTag, SchoolTagOption, SchoolTagMatch
+
+from schools.models import School, SchoolAlias, SchoolTag, SchoolTagOption
 
 
 class SchoolResource(resources.ModelResource):

@@ -102,27 +102,3 @@ class SchoolTagOption(models.Model):
 
     def __str__(self):
         return self.text
-
-
-class SchoolTagMatch(models.Model):
-    review = models.ForeignKey(
-        'reviews.Review',
-        models.CASCADE,
-        related_name='matches',
-        verbose_name=_('Отзыв'),
-    )
-    tag_option = models.ForeignKey(
-        'schools.SchoolTagOption',
-        models.CASCADE,
-        verbose_name=_('Вариант метки'),
-    )
-    text = models.TextField(
-        _('Текст'),
-    )
-
-    class Meta:
-        verbose_name = _('Совпадение метки')
-        verbose_name_plural = _('Совпадения меток')
-
-    def __str__(self):
-        return self.text
