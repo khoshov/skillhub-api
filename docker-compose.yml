@@ -33,16 +33,16 @@ services:
       - ./esdata:/var/lib/elasticsearch/data
     ports:
       - "9200:9200"
-  kibana:
-    container_name: kibana
-    image: kibana:7.17.10
-    restart: unless-stopped
-    depends_on:
-      - elasticsearch
-    ports:
-      - "5601:5601"
-    env_file:
-      - .env
+#  kibana:
+#    container_name: kibana
+#    image: kibana:7.17.10
+#    restart: unless-stopped
+#    depends_on:
+#      - elasticsearch
+#    ports:
+#      - "5601:5601"
+#    env_file:
+#      - .env
   nginx-proxy:
     container_name: nginx-proxy
     image: nginxproxy/nginx-proxy
