@@ -10,6 +10,7 @@ class ReviewResource(resources.ModelResource):
 
     class Meta:
         model = Review
+        exclude = ('source',)
 
 
 @admin.register(Review)

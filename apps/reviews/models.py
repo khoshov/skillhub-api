@@ -42,6 +42,7 @@ class Review(models.Model):
         'reviews.ReviewSource',
         models.CASCADE,
         verbose_name=_('Источник отзыва'),
+        blank=True, null=True,
     )
     url = models.URLField(
         _('Ссылка на отзыв'),

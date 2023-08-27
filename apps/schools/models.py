@@ -63,7 +63,7 @@ class SchoolAlias(models.Model):
     school = models.ForeignKey(
         'schools.School',
         models.CASCADE,
-        related_name='aliases',
+        # related_name='aliases',
         verbose_name=_('Школа'),
     )
 
