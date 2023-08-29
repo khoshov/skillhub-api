@@ -1,7 +1,7 @@
 from typing import List
 
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import Subquery, OuterRef, Q
+from django.db.models import Subquery, OuterRef, Q, Avg
 from django.http import Http404
 from ninja import Router
 
@@ -19,6 +19,13 @@ async def list_schools(request):
             Review.objects.filter(
                 school_id=OuterRef('id')
             ).order_by('-published').values('published')[:1]
+        ),
+        rating=Subquery(
+            Review.objects.filter(
+                school_id=OuterRef('id')
+            ).annotate(
+                rating=Avg('rating'),
+            ).values('rating')[:1]
         ),
         aliases=ArrayAgg('schoolalias__name', filter=Q(schoolalias__isnull=False)),
     )

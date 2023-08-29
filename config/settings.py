@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # Third party apps
     'ckeditor',
     'django_elasticsearch_dsl',
+    'django_extensions',
     'import_export',
     'mptt',
 

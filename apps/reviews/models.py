@@ -72,6 +72,11 @@ class Review(models.Model):
         choices=SENTIMENT,
         default=UNKNOWN,
     )
+    criteria = models.ManyToManyField(
+        'reviews.Criterion',
+        through='reviews.ReviewCriterion',
+        verbose_name=_('Критерии оценки'),
+    )
 
     class Meta:
         verbose_name = _('Отзыв')
@@ -99,25 +104,49 @@ class ReviewSource(models.Model):
         return self.name
 
 
-class ReviewTagMatch(models.Model):
-    review = models.ForeignKey(
-        'reviews.Review',
-        models.CASCADE,
-        related_name='matches',
-        verbose_name=_('Отзыв'),
-    )
-    tag_option = models.ForeignKey(
-        'schools.SchoolTagOption',
-        models.CASCADE,
-        verbose_name=_('Вариант метки'),
-    )
-    text = models.TextField(
-        _('Текст'),
+class Criterion(models.Model):
+    name = models.CharField(
+        _('Имя'),
+        max_length=255,
     )
 
     class Meta:
-        verbose_name = _('Совпадение метки')
-        verbose_name_plural = _('Совпадения меток')
+        verbose_name = _('Критерий оценки')
+        verbose_name_plural = _('Критерий оценки')
 
     def __str__(self):
-        return self.text
+        return self.name
+
+
+class CriterionVariation(models.Model):
+    name = models.CharField(
+        _('Имя'),
+        max_length=255,
+    )
+    criterion = models.ForeignKey(
+        'reviews.Criterion',
+        models.CASCADE,
+        related_name='criteria',
+        verbose_name=_('Критерий оценки'),
+    )
+
+    class Meta:
+        verbose_name = _('Вариация критерия оценки')
+        verbose_name_plural = _('Вариации критериев оценки')
+
+    def __str__(self):
+        return self.name
+
+
+class ReviewCriterion(models.Model):
+    review = models.ForeignKey(
+        'reviews.Review',
+        models.CASCADE,
+    )
+    category = models.ForeignKey(
+        'reviews.Criterion',
+        models.CASCADE,
+    )
+
+    class Meta:
+        db_table = 'review_criterion'

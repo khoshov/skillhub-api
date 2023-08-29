@@ -3,7 +3,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from django.contrib import admin
 
-from reviews.models import Review, ReviewSource
+from reviews.models import Review, ReviewSource, CriterionVariation, Criterion
 
 
 class ReviewResource(resources.ModelResource):
@@ -23,3 +23,13 @@ class ReviewAdmin(ImportExportModelAdmin):
 @admin.register(ReviewSource)
 class ReviewSourceAdmin(admin.ModelAdmin):
     pass
+
+
+class CriterionVariationInline(admin.TabularInline):
+    model = CriterionVariation
+    extra = 0
+
+
+@admin.register(Criterion)
+class CriterionAdmin(admin.ModelAdmin):
+    inlines = [CriterionVariationInline]

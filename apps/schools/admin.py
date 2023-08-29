@@ -4,7 +4,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from core.admin import activate, deactivate
 
-from schools.models import School, SchoolAlias, SchoolTag, SchoolTagOption
+from schools.models import School, SchoolAlias
 
 
 class SchoolResource(resources.ModelResource):
@@ -23,13 +23,3 @@ class SchoolAdmin(ImportExportModelAdmin):
     list_filter = ('is_active',)
     inlines = [SchoolAliasInline]
     actions = [activate, deactivate]
-
-
-class TagOptionInline(admin.TabularInline):
-    model = SchoolTagOption
-    extra = 0
-
-
-@admin.register(SchoolTag)
-class TagAdmin(admin.ModelAdmin):
-    inlines = [TagOptionInline]
