@@ -162,6 +162,7 @@ STORAGES = {
     },
 }
 
+ELASTICSEARCH_DSL_URL = env("ELASTICSEARCH_DSL_URL")
 ELASTICSEARCH_DSL = {
     "default": {
         "hosts": env("ELASTICSEARCH_DSL_URL")
