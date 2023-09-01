@@ -20,6 +20,12 @@ async def list_reviews(request, limit: int = 10, offset: int = 0):
     return [review async for review in reviews]
 
 
+@router.get('/criteria', response=List[ReviewCriterionSchema])
+async def list_criteria(request, limit: int = 10, offset: int = 0):
+    criteria = ReviewCriterion.objects.all()[offset: offset + limit]
+    return [criterion async for criterion in criteria]
+
+
 @router.post("/")
 async def create_review(request, payload: ReviewSchema):
     review = await Review.objects.acreate(**payload.dict())
@@ -37,12 +43,6 @@ async def update_review(request, review_id: int, payload: ReviewSchema):
         raise Http404(
             "No %s matches the given query." % Review._meta.object_name
         )
-
-
-@router.get('/criteria', response=List[ReviewCriterionSchema])
-async def list_criteria(request, limit: int = 10, offset: int = 0):
-    criteria = ReviewCriterion.objects.all()[offset: offset + limit]
-    return [criterion async for criterion in criteria]
 
 
 @router.get("/{review_id}", response=ReviewSchema)
