@@ -1,16 +1,21 @@
+from typing import Optional
+
 from ninja import ModelSchema
 
-from .models import Review, ReviewCriterion
+from .models import Review, Criterion
 
 
 class ReviewSchema(ModelSchema):
+    school_id: Optional[int] = None
+    source_id: Optional[int] = None
+
     class Config:
         model = Review
-        model_fields = '__all__'
-        model_fields_optional = ['id']
+        model_exclude = ['school', 'source']
+        model_fields_optional = '__all__'
 
 
-class ReviewCriterionSchema(ModelSchema):
+class CriterionSchema(ModelSchema):
     class Config:
-        model = ReviewCriterion
+        model = Criterion
         model_fields = '__all__'

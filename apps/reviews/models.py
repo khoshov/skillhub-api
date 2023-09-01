@@ -143,7 +143,7 @@ class ReviewCriterion(models.Model):
         'reviews.Review',
         models.CASCADE,
     )
-    category = models.ForeignKey(
+    criterion = models.ForeignKey(
         'reviews.Criterion',
         models.CASCADE,
     )

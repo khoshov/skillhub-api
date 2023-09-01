@@ -1,11 +1,11 @@
-import asyncio
 from typing import List
 
+from aiostream import stream
 from django.http import Http404
 from ninja import Router
 
-from .models import Review, ReviewCriterion
-from .schemas import ReviewSchema, ReviewCriterionSchema
+from .models import Review, Criterion
+from .schemas import ReviewSchema, CriterionSchema
 
 router = Router()
 
@@ -20,24 +20,34 @@ async def list_reviews(request, limit: int = 10, offset: int = 0):
     return [review async for review in reviews]
 
 
-@router.get('/criteria', response=List[ReviewCriterionSchema])
-async def list_criteria(request, limit: int = 10, offset: int = 0):
-    criteria = ReviewCriterion.objects.all()[offset: offset + limit]
+@router.get('/criteria', response=List[CriterionSchema])
+async def list_criteria_variations(request, limit: int = 10, offset: int = 0):
+    criteria = Criterion.objects.all()[offset: offset + limit]
     return [criterion async for criterion in criteria]
 
 
 @router.post("/")
 async def create_review(request, payload: ReviewSchema):
-    review = await Review.objects.acreate(**payload.dict())
+    kwargs = payload.dict()
+    criteria = kwargs.pop('criteria')
+    review = await Review.objects.acreate(**kwargs)
+    if criteria:
+        await review.criteria.aset(criteria)
     return {"id": review.id}
 
 
 @router.put("/{review_id}")
 async def update_review(request, review_id: int, payload: ReviewSchema):
     try:
+        kwargs = payload.dict()
+        criteria = kwargs.pop('criteria')
         review = await Review.objects.aget(id=review_id)
-        await asyncio.gather(*map(lambda k, v: setattr(review, k, v), payload.dict().items()))
-        review.asave()
+        async for key, value in stream.iterate(kwargs.items()):
+            if value:
+                setattr(review, key, value)
+        await review.asave()
+        if criteria:
+            await review.criteria.aset(criteria)
         return {"success": True}
     except Review.DoesNotExist:
         raise Http404(

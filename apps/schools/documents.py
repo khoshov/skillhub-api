@@ -6,6 +6,7 @@ from .models import School
 
 @registry.register_document
 class SchoolDocument(Document):
+    id = fields.IntegerField()
     name = fields.TextField()
     description = fields.TextField()
     url = fields.TextField(attr='get_absolute_url')

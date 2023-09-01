@@ -13,11 +13,17 @@ class ReviewResource(resources.ModelResource):
         exclude = ('source',)
 
 
+class ReviewCriterionInline(admin.TabularInline):
+    model = Review.criteria.through
+    extra = 0
+
+
 @admin.register(Review)
 class ReviewAdmin(ImportExportModelAdmin):
     list_display = ('id', 'url', 'rating', 'school', 'source', 'published')
     list_filter = ('school', 'rating', 'source', 'published')
     resource_class = ReviewResource
+    inlines = [ReviewCriterionInline]
 
 
 @admin.register(ReviewSource)

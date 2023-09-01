@@ -1,27 +1,16 @@
+from django.conf import settings
+from elasticsearch import AsyncElasticsearch
 from ninja import Router
-
-from courses.documents import CourseDocument
-from schools.documents import SchoolDocument
 
 router = Router()
 
+es = AsyncElasticsearch(settings.ELASTICSEARCH_DSL_URL)
 
-@router.get('/', response=list[dict])
-def search(request, q: str):
-    result = []
-    query_params = {
-        'query': q,
-        'fuzziness': '3',
-        'fields': ['name', 'description'],
-    }
 
-    for document in (CourseDocument, SchoolDocument):
-        search_results = document.search().query('multi_match', **query_params)
-        for item in search_results:
-            result.append({
-                'name': item.name,
-                'description': item.description,
-                'url': item.url
-            })
-
-    return result
+@router.get('/')
+async def search(request, q: str):
+    resp = await es.search(
+        body={'query': {'query_string': {'query': f'{q}~5'}}},
+        size=10_000,
+    )
+    return resp['hits']
