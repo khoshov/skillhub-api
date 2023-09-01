@@ -2,6 +2,7 @@ from typing import List
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Subquery, OuterRef, Q, Avg
+from django.db.models.functions import Round
 from django.http import Http404
 from ninja import Router
 
@@ -13,7 +14,7 @@ router = Router()
 
 
 @router.get('/', response=List[SchoolSchema])
-async def list_schools(request):
+async def list_schools(request, limit: int = 10, offset: int = 0):
     schools = School.objects.annotate(
         last_review=Subquery(
             Review.objects.filter(
@@ -23,12 +24,12 @@ async def list_schools(request):
         rating=Subquery(
             Review.objects.filter(
                 school_id=OuterRef('id')
-            ).annotate(
-                rating=Avg('rating'),
-            ).values('rating')[:1]
+            ).values('school__reviews').annotate(
+                average_rating=Round(Avg('rating'), precision=1),
+            ).values('average_rating')[:1]
         ),
         aliases=ArrayAgg('schoolalias__name', filter=Q(schoolalias__isnull=False)),
-    )
+    )[offset: offset + limit]
     return [school async for school in schools]
 
 

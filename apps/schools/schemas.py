@@ -1,4 +1,6 @@
+import decimal
 from datetime import date
+from typing import Optional
 
 from ninja import ModelSchema
 
@@ -6,9 +8,9 @@ from .models import School
 
 
 class SchoolSchema(ModelSchema):
-    last_review: date = None
     aliases: list[str]
-    rating: float
+    last_review: Optional[date]
+    rating: Optional[decimal.Decimal]
 
     class Config:
         model = School

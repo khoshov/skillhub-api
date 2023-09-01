@@ -112,7 +112,7 @@ class Criterion(models.Model):
 
     class Meta:
         verbose_name = _('Критерий оценки')
-        verbose_name_plural = _('Критерий оценки')
+        verbose_name_plural = _('Критерии оценки')
 
     def __str__(self):
         return self.name

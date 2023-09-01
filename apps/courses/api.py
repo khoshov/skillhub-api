@@ -10,8 +10,9 @@ router = Router()
 
 
 @router.get('/', response=List[CourseSchema])
-async def list_courses(request):
-    return [course async for course in Course.objects.all()]
+async def list_courses(request, limit: int = 10, offset: int = 0):
+    courses = Course.objects.all()[offset: offset + limit]
+    return [course async for course in courses]
 
 
 @router.get("/{course_id}", response=CourseSchema)
