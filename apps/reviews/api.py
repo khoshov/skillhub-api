@@ -1,10 +1,11 @@
+import asyncio
 from typing import List
 
 from django.http import Http404
 from ninja import Router
 
-from .models import Review
-from .schemas import ReviewSchema
+from .models import Review, ReviewCriterion
+from .schemas import ReviewSchema, ReviewCriterionSchema
 
 router = Router()
 
@@ -17,6 +18,31 @@ async def list_reviews(request, limit: int = 10, offset: int = 0):
         '-published',
     )[offset: offset + limit]
     return [review async for review in reviews]
+
+
+@router.post("/")
+async def create_review(request, payload: ReviewSchema):
+    review = await Review.objects.acreate(**payload.dict())
+    return {"id": review.id}
+
+
+@router.put("/{review_id}")
+async def update_review(request, review_id: int, payload: ReviewSchema):
+    try:
+        review = await Review.objects.aget(id=review_id)
+        await asyncio.gather(*map(lambda k, v: setattr(review, k, v), payload.dict().items()))
+        review.asave()
+        return {"success": True}
+    except Review.DoesNotExist:
+        raise Http404(
+            "No %s matches the given query." % Review._meta.object_name
+        )
+
+
+@router.get('/criteria', response=List[ReviewCriterionSchema])
+async def list_criteria(request, limit: int = 10, offset: int = 0):
+    criteria = ReviewCriterion.objects.all()[offset: offset + limit]
+    return [criterion async for criterion in criteria]
 
 
 @router.get("/{review_id}", response=ReviewSchema)
