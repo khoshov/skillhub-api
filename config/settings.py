@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     # Third party apps
     'ckeditor',
+    'corsheaders',
     'django_elasticsearch_dsl',
     'django_extensions',
     'import_export',
@@ -171,4 +172,6 @@ ELASTICSEARCH_DSL = {
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
