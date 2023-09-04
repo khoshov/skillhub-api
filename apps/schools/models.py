@@ -4,11 +4,18 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from core.fields import AutoSlugField
+
 
 class School(models.Model):
     name = models.CharField(
         _('Название'),
         max_length=255,
+    )
+    slug = AutoSlugField(
+        _('Слаг'),
+        populate_from='name',
+        unique=True,
     )
     description = RichTextField(
         _('Описание'),
@@ -46,7 +53,7 @@ class School(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('api-1:get_school', kwargs={'school_id': self.pk})
+        return reverse('api-1:get_school', kwargs={'slug': self.slug})
 
 
 class SchoolAlias(models.Model):

@@ -8,12 +8,12 @@ from ninja import Router
 
 from reviews.models import Review
 from .models import School
-from .schemas import SchoolSchema
+from .schemas import SchoolReadSchema
 
 router = Router()
 
 
-@router.get('/', response=List[SchoolSchema])
+@router.get('/', response=List[SchoolReadSchema])
 async def list_schools(request, limit: int = 10, offset: int = 0):
     schools = School.objects.annotate(
         last_review=Subquery(
@@ -33,10 +33,10 @@ async def list_schools(request, limit: int = 10, offset: int = 0):
     return [school async for school in schools]
 
 
-@router.get("/{school_id}", response=SchoolSchema)
-async def get_school(request, school_id: int):
+@router.get("/{slug}", response=SchoolReadSchema)
+async def get_school(request, slug: str):
     try:
-        return await School.objects.aget(id=school_id)
+        return await School.objects.aget(slug=slug)
     except School.DoesNotExist:
         raise Http404(
             "No %s matches the given query." % School._meta.object_name

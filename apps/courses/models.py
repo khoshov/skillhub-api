@@ -32,22 +32,6 @@ class Course(models.Model):
         (ADVANCED, _('Продвинутый')),
     )
 
-    MISSING = 0
-    LOW = 1
-    INSIGNIFICANT = 2
-    AVERAGE = 3
-    SIGNIFICANT = 4
-    HIGH = 5
-
-    PRICE = (
-        (MISSING, _('Бесплатно')),
-        (LOW, _('Низкая цена')),
-        (INSIGNIFICANT, _('Невысокая цена')),
-        (AVERAGE, _('Средняя цена')),
-        (SIGNIFICANT, _('Значительная цена')),
-        (HIGH, _('Высокая цена')),
-    )
-
     MONTH = 1
     LESSON = 2
     DURATION_TYPE = (
@@ -57,6 +41,11 @@ class Course(models.Model):
 
     name = RichTextField(
         _('Название'),
+    )
+    slug = AutoSlugField(
+        _('Слаг'),
+        populate_from='name',
+        unique=True,
     )
     description = RichTextField(
         _('Описание'),
@@ -93,11 +82,6 @@ class Course(models.Model):
         _('Цена ₽'),
         blank=True, null=True,
     )
-    price_category = models.PositiveIntegerField(
-        _('Категория цены'),
-        choices=PRICE,
-        default=AVERAGE,
-    )
     duration = models.PositiveIntegerField(
         _('Длительность курсов'),
         blank=True, null=True,
@@ -106,10 +90,6 @@ class Course(models.Model):
         _('Единицы измерения длительности курсов'),
         choices=DURATION_TYPE,
         default=MONTH,
-    )
-    duration_category = models.PositiveIntegerField(
-        _('Категория продолжительности'),
-        blank=True, null=True,
     )
     status = models.PositiveSmallIntegerField(
         _('Статус'),
@@ -176,7 +156,7 @@ class Course(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('api-1:get_course', kwargs={'course_id': self.pk})
+        return reverse('api-1:get_course', kwargs={'slug': self.slug})
 
 
 class Category(MPTTModel):

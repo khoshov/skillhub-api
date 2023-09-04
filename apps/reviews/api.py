@@ -5,12 +5,12 @@ from django.http import Http404
 from ninja import Router
 
 from .models import Review, Criterion
-from .schemas import ReviewSchema, CriterionSchema
+from .schemas import CriterionReadSchema, ReviewReadSchema, ReviewCreateSchema, ReviewUpdateSchema
 
 router = Router()
 
 
-@router.get('/', response=List[ReviewSchema])
+@router.get('/', response=List[ReviewReadSchema])
 async def list_reviews(request, limit: int = 10, offset: int = 0):
     reviews = Review.objects.prefetch_related(
         'criteria',
@@ -20,14 +20,14 @@ async def list_reviews(request, limit: int = 10, offset: int = 0):
     return [review async for review in reviews]
 
 
-@router.get('/criteria', response=List[CriterionSchema])
+@router.get('/criteria', response=List[CriterionReadSchema])
 async def list_criteria_variations(request, limit: int = 10, offset: int = 0):
     criteria = Criterion.objects.all()[offset: offset + limit]
     return [criterion async for criterion in criteria]
 
 
 @router.post("/")
-async def create_review(request, payload: ReviewSchema):
+async def create_review(request, payload: ReviewCreateSchema):
     kwargs = payload.dict()
     criteria = kwargs.pop('criteria')
     review = await Review.objects.acreate(**kwargs)
@@ -37,7 +37,7 @@ async def create_review(request, payload: ReviewSchema):
 
 
 @router.put("/{review_id}")
-async def update_review(request, review_id: int, payload: ReviewSchema):
+async def update_review(request, review_id: int, payload: ReviewUpdateSchema):
     try:
         kwargs = payload.dict()
         criteria = kwargs.pop('criteria')
@@ -55,10 +55,12 @@ async def update_review(request, review_id: int, payload: ReviewSchema):
         )
 
 
-@router.get("/{review_id}", response=ReviewSchema)
+@router.get("/{review_id}", response=ReviewReadSchema)
 async def get_review(request, review_id: int):
     try:
-        return await Review.objects.aget(id=review_id)
+        return await Review.objects.prefetch_related(
+            'criteria',
+        ).aget(id=review_id)
     except Review.DoesNotExist:
         raise Http404(
             "No %s matches the given query." % Review._meta.object_name
