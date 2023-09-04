@@ -6,8 +6,8 @@ from django.http import Http404
 from ninja import Router
 
 from reviews.models import Review
-from .models import Course
-from .schemas import CourseReadSchema
+from .models import Course, Category
+from .schemas import CourseReadSchema, CategoryReadSchema
 
 router = Router()
 
@@ -23,12 +23,34 @@ async def list_courses(request, page: int = 1, page_size: int = 10):
             ).values('average_rating')[:1]
         ),
         school_name=F('school__name')
+    ).prefetch_related(
+        'categories',
     )[(page - 1) * page_size: page * page_size]
     return [course async for course in courses]
 
 
-@router.get("/{slug}", response=CourseReadSchema)
-async def get_course(request, slug: str):
+@router.get('/categories', response=List[CategoryReadSchema])
+def list_categories(request):
+    categories = Category.objects.filter(
+        parent__isnull=True,
+    ).prefetch_related(
+        'children',
+    ).order_by(
+        'sort_order',
+    )
+    return categories
+
+
+@router.get('/categories/{category_slug}', response=List[CategoryReadSchema])
+def get_category(request, category_slug):
+    categories = Category.objects.prefetch_related(
+        'children',
+    ).get(slug=category_slug)
+    return categories
+
+
+@router.get("/{course_slug}", response=CourseReadSchema)
+async def get_course(request, course_slug: str):
     try:
         return await Course.objects.annotate(
             rating=Subquery(
@@ -39,13 +61,10 @@ async def get_course(request, slug: str):
                 ).values('average_rating')[:1]
             ),
             school_name=F('school__name')
-        ).aget(slug=slug)
+        ).prefetch_related(
+            'categories',
+        ).aget(slug=course_slug)
     except Course.DoesNotExist:
         raise Http404(
             "No %s matches the given query." % Course._meta.object_name
         )
-
-# @router.get('/', response=List[CourseSchema])
-# async def list_categories(request, limit: int = 10, offset: int = 0):
-#     courses = Category.objects.all()[offset: offset + limit]
-#     return [course async for course in courses]

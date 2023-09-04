@@ -156,7 +156,7 @@ class Course(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('api-1:get_course', kwargs={'slug': self.slug})
+        return reverse('api-1:get_course', kwargs={'course_slug': self.slug})
 
 
 class Category(MPTTModel):
