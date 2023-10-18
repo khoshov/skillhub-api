@@ -14,7 +14,10 @@ router = Router()
 
 @router.get('/', response=List[CourseReadSchema])
 async def list_courses(request, page: int = 1, page_size: int = 10):
-    courses = Course.objects.annotate(
+
+    courses = Course.objects.filter(
+        id__in=Subquery(Course.objects.only('id').all()[(page - 1) * page_size: page * page_size])
+    ).annotate(
         rating=Subquery(
             Review.objects.filter(
                 school_id=OuterRef('school_id')
@@ -25,7 +28,7 @@ async def list_courses(request, page: int = 1, page_size: int = 10):
         school_name=F('school__name')
     ).prefetch_related(
         'categories',
-    )[(page - 1) * page_size: page * page_size]
+    )
     return [course async for course in courses]
 
 
