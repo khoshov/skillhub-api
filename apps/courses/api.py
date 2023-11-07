@@ -5,6 +5,7 @@ from django.db.models.functions import Round
 from django.http import Http404
 from ninja import Router
 
+from core.utils import get_descendants
 from reviews.models import Review
 from .models import Course, Category
 from .schemas import CourseReadSchema, CategoryReadSchema
@@ -13,7 +14,7 @@ router = Router()
 
 
 @router.get('/', response=List[CourseReadSchema])
-async def list_courses(request, page: int = 1, page_size: int = 10):
+async def list_courses(request, category: str, page: int = 1, page_size: int = 10):
 
     courses = Course.objects.filter(
         id__in=Subquery(Course.objects.only('id').all()[(page - 1) * page_size: page * page_size])
@@ -29,6 +30,10 @@ async def list_courses(request, page: int = 1, page_size: int = 10):
     ).prefetch_related(
         'categories',
     )
+    if category:
+        categories = Category.objects.filter(slug=category)
+        categories = await get_descendants(categories)
+        courses = courses.filter(categories__in=categories)
     return [course async for course in courses]
 
 
