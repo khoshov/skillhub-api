@@ -14,7 +14,7 @@ router = Router()
 
 
 @router.get('/', response=List[CourseReadSchema])
-async def list_courses(request, category: str, page: int = 1, page_size: int = 10):
+async def list_courses(request, category: str = None, page: int = 1, page_size: int = 10):
 
     courses = Course.objects.filter(
         id__in=Subquery(Course.objects.only('id').all()[(page - 1) * page_size: page * page_size])
