@@ -16,9 +16,7 @@ router = Router()
 @router.get('/', response=List[CourseReadSchema])
 async def list_courses(request, category: str = None, page: int = 1, page_size: int = 10):
 
-    courses = Course.objects.filter(
-        id__in=Subquery(Course.objects.only('id').all()[(page - 1) * page_size: page * page_size])
-    ).annotate(
+    courses = Course.objects.annotate(
         rating=Subquery(
             Review.objects.filter(
                 school_id=OuterRef('school_id')
@@ -33,8 +31,9 @@ async def list_courses(request, category: str = None, page: int = 1, page_size: 
     if category:
         categories = Category.objects.filter(slug=category)
         categories = await get_descendants(categories)
+        categories = [category async for category in categories]
         courses = courses.filter(categories__in=categories)
-    return [course async for course in courses]
+    return [course async for course in courses[(page - 1) * page_size: page * page_size]]
 
 
 @router.get('/categories', response=List[CategoryReadSchema])
