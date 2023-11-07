@@ -15,7 +15,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd /home/ubuntu/skillhub-api
-          git pull | yes
+          yes | git pull
           docker-compose down
           docker-compose build
           docker-compose up -d
