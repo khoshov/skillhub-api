@@ -27,11 +27,10 @@ async def list_courses(request, category: str = None, page: int = 1, page_size: 
         school_name=F('school__name')
     ).prefetch_related(
         'categories',
-    )
+    ).distinct()
     if category:
         categories = Category.objects.filter(slug=category)
         categories = await get_descendants(categories)
-        categories = [category async for category in categories]
         courses = courses.filter(categories__in=categories)
     return [course async for course in courses[(page - 1) * page_size: page * page_size]]
 
