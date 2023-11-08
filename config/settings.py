@@ -176,3 +176,8 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_ALL_ORIGINS = True
+
+CACHEOPS_REDIS = "redis://redis:6379/1"
+CACHEOPS = {
+    '*.*': {'ops': (), 'timeout': 60*60},
+}

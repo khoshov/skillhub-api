@@ -275,6 +275,8 @@ defusedxml==0.7.1 ; python_version >= "3.9" and python_version < "4.0" \
 diff-match-patch==20230430 ; python_version >= "3.9" and python_version < "4.0" \
     --hash=sha256:953019cdb9c9d2c9e47b5b12bcff3cf4746fc4598eb406076fa1fc27e6a1f15c \
     --hash=sha256:dce43505fb7b1b317de7195579388df0746d90db07015ed47a85e5e44930ef93
+django-cacheops==7.0.2 ; python_version >= "3.9" and python_version < "4.0" \
+    --hash=sha256:77a37c73d7facfc7299365ed66a12be7a487dd745dd86c1d33ca2ebfd3b32878
 django-ckeditor==6.7.0 ; python_version >= "3.9" and python_version < "4.0" \
     --hash=sha256:0489f7a6ae93360d328f77cea17c04891103cbdfa6c962af386bbe47e811671b \
     --hash=sha256:73399fb8f56f565e7519b57adbd7c585623db2cdc8c75666f56918d3eecf7906
@@ -379,6 +381,9 @@ frozenlist==1.4.0 ; python_version >= "3.9" and python_version < "4" \
     --hash=sha256:f0ed05f5079c708fe74bf9027e95125334b6978bf07fd5ab923e9e55e5fbb9d3 \
     --hash=sha256:f61e2dc5ad442c52b4887f1fdc112f97caeff4d9e6ebe78879364ac59f1663e1 \
     --hash=sha256:fec520865f42e5c7f050c2a79038897b1c7d1595e907a9e08e3353293ffc948e
+funcy==2.0 ; python_version >= "3.9" and python_version < "4.0" \
+    --hash=sha256:3963315d59d41c6f30c04bc910e10ab50a3ac4a225868bfa96feed133df075cb \
+    --hash=sha256:53df23c8bb1651b12f095df764bfb057935d49537a56de211b098f4c79614bb0
 h11==0.14.0 ; python_version >= "3.9" and python_version < "4.0" \
     --hash=sha256:8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d \
     --hash=sha256:e3fe4ac4b851c468cc8363d500db52c2ead036020723024a109d37346efaa761
@@ -611,6 +616,9 @@ pyyaml==6.0.1 ; python_version >= "3.9" and python_version < "4.0" \
     --hash=sha256:fca0e3a251908a499833aa292323f32437106001d436eca0e6e7833256674585 \
     --hash=sha256:fd1592b3fdf65fff2ad0004b5e363300ef59ced41c2e6b3a99d4089fa8c5435d \
     --hash=sha256:fd66fc5d0da6d9815ba2cebeb4205f95818ff4b79c3ebe268e75d961704af52f
+redis==5.0.1 ; python_version >= "3.9" and python_version < "4.0" \
+    --hash=sha256:0dab495cd5753069d3bc650a0dde8a8f9edde16fc5691b689a566eda58100d0f \
+    --hash=sha256:ed4802971884ae19d640775ba3b03aa2e7bd5e8fb8dfaed2decce4d0fc48391f
 six==1.16.0 ; python_version >= "3.9" and python_version < "4.0" \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
